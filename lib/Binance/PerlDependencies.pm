@@ -35,7 +35,7 @@ our $required = {
     'Digest::SHA'
         => '6.02',
     'LWP::UserAgent'
-        => '6.33'
+        => '5.837''
 };
 
 1;
