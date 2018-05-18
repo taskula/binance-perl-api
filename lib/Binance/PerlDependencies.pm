@@ -30,8 +30,12 @@ our $required = {
         => '1.38',
     'JSON'
         => '2.07',
+    'Time::HiRes'
+        => '1.9758',
+    'Digest::SHA'
+        => '6.02',
     'LWP::UserAgent'
-        => '5.837',
+        => '5.837'
 };
 
 1;
