@@ -1,4 +1,4 @@
-package Binance::Exception::Parameter::Required;
+package Binance::Exception;
 
 # MIT License
 #
