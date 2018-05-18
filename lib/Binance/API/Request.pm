@@ -27,7 +27,7 @@ use warnings;
 
 use base 'LWP::UserAgent';
 
-use Digest::SHA qw( hmac_sha512_hex );
+use Digest::SHA qw( hmac_sha256_hex );
 use JSON;
 use Time::HiRes;
 
@@ -137,7 +137,7 @@ sub _init {
         my $body_params = $uri->clone->query_form($body);
         my $query_params = $uri->query_form($query);
         $full_path = $uri->as_string;
-        $body_params->{signature} = hmac_sha512_hex(
+        $body_params->{signature} = hmac_sha256_hex(
             { %$body_params, %$query_params }, $self->{secretKey}
         ) if $params->{signed};
         $data{'Content'} = $body_params;
@@ -149,10 +149,14 @@ sub _init {
             $query->{'recvWindow'} = $recvWindow;
         }
 
-        my $query_params = $uri->query_form($query);
-        $query_params->{signature} = hmac_sha512_hex(
-            $uri->query, $self->{secretKey}
-        ) if $params->{signed};
+        $uri->query_form($query);
+        if ($params->{signed}) {
+            $query->{signature} = hmac_sha256_hex(
+                $uri->query, $self->{secretKey}
+            );
+            $uri->query_form($query);
+        }
+
         $full_path = $uri->as_string;
     }
     # Body parameters only
@@ -163,10 +167,14 @@ sub _init {
         }
 
         $full_path = $uri->as_string;
-        my $body_params = $uri->query_form($body);
-        $body_params->{signature} = hmac_sha512_hex(
-            $uri->query, $self->{secretKey}
-        ) if $params->{signed};
+        $uri->query_form($body);
+        if ($params->{signed}) {
+            $body->{signature} = hmac_sha256_hex(
+                $uri->query, $self->{secretKey}
+            );
+            $uri->query_form($body);
+        }
+
         $data{'Content'} = $uri->query;
     }
 
