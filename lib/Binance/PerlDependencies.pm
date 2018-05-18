@@ -30,6 +30,8 @@ our $required = {
         => '1.38',
     'JSON'
         => '2.07',
+    'LWP::UserAgent'
+        => '5.837',
 };
 
 1;
