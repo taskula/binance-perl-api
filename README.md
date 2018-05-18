@@ -2,23 +2,46 @@
 
 Perl module for interacting with the [Binance API](https://www.binance.com/restapipub.html).
 
-### Prerequisites
+### Perl dependencies
 
-```
-TODO
-```
+See lib/Binance/PerlDependencies.pm
 
 ### Installing
 
 ```
-TODO
+perl Makefile.PL
+make
+make test
+sudo make install
+```
+
+#### Troubleshooting
+
+`perl Makefile.PL` fails:
+```
+MakeMaker FATAL: prerequisites not found.
+    Exception::Class not installed
+    JSON not installed
+
+
+Please install these modules first and rerun 'perl Makefile.PL'.
+```
+
+See `lib/Binance/PerlDependencies.pm` for required Perl Modules. In the above case, you would do:
+```
+sudo cpan Exception::Class
+sudo cpan JSON
 ```
 
 ## Running the tests
 
 ```
-prove t/
+prove t/*
 ```
+
+## Contributing
+
+Feel free to provide pull requests!
 
 ## Author
 
