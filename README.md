@@ -39,6 +39,31 @@ sudo cpan JSON
 prove t/*
 ```
 
+## Usage
+
+```
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Binance::API;
+use Data::Dumper;
+
+my $api = Binance::API->new(
+    apiKey => 'my_api_key',
+    secretKey => 'my_secret_key',
+);
+
+my $ticker = $api->ticker( symbol => 'ETHBTC' );
+
+warn Dumper $ticker;
+```
+
+See lib/Binance/API.pm for full list of available methods.
+
+(thanks to @ibrierley, https://github.com/taskula/binance-perl-api/issues/1#issuecomment-390226345)
+
 ## Contributing
 
 Feel free to provide pull requests!
