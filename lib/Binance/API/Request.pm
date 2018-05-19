@@ -119,7 +119,7 @@ sub _init {
         delete $body->{$param} unless defined $body->{$param};
     }
     
-    my $recvWindow = 6000;
+    my $recvWindow = 5000;
     $recvWindow = $self->{'recvWindow'} if defined $self->{'recvWindow'};
     my $timestamp = int Time::HiRes::time * 1000 if $params->{'signed'};
     my $uri = URI->new( BASE_URL . $path );
