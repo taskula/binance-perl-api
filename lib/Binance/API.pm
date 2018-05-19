@@ -207,37 +207,6 @@ sub exchange_info {
     return $_[0]->ua->get('/api/v1/ticker/exchangeInfo');
 }
 
-=head2 all_prices
-
-$api->all_prices();
-
-Latest price for all symbols.
-
-PARAMETERS:
-    NONE
-
-RETURNS:
-    An array of HASHrefs:
-
-    [
-      {
-        "symbol": "LTCBTC",
-        "price": "4.00000200"
-      },
-      {
-        "symbol": "ETHBTC",
-        "price": "0.07946600"
-      }
-    ]
-
-    (Source: Binance API documentation)
-
-=cut
-
-sub all_prices {
-    return $_[0]->ua->get('/api/v1/ticker/allPrices');
-}
-
 =head2 depth
 
 $api->depth( symbol => 'ETHBTC' );
@@ -1106,7 +1075,6 @@ sub delete_user_data_stream {
     };
     return $self->ua->delete('/api/v1/userDataStream', { query => $query } );
 }
-
 
 sub log { return $_[0]->{logger}; }
 sub ua  { return $_[0]->{ua}; }

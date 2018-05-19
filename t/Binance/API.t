@@ -77,15 +77,20 @@ subtest 'all_book_tickers() tests' => sub {
     ok(defined $all_book_tickers->[0]->{'symbol'}, 'Got a successful response');
 };
 
-subtest 'all_prices() tests' => sub {
-    plan tests => 3;
+subtest 'ticker_price() tests' => sub {
+    plan tests => 6;
 
-    ok(Binance::API->can('all_prices'), 'method all_prices() '
+    ok(Binance::API->can('ticker_price'), 'method ticker_price() '
        .'available');
 
-    my $all_prices = $api->all_prices;
-    ok(defined $all_prices, 'Requested all_prices');
+    my $all_prices = $api->ticker_price;
+    ok(defined $all_prices, 'Requested all ticker_price');
     ok(defined $all_prices->[0]->{'symbol'}, 'Got a successful response');
+    ok($all_prices > 0, 'Got multiple ticker prices');
+
+    my $one_price = $api->ticker_price( symbol => 'ETHBTC' );
+    ok(defined $one_price, 'Requested one ticker_price');
+    is($one_price->{'symbol'}, 'ETHBTC', 'Got a successful response');
 };
 
 subtest 'depth() tests' => sub {
