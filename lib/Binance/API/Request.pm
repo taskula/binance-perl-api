@@ -118,8 +118,9 @@ sub _init {
     foreach my $param (keys %$body) {
         delete $body->{$param} unless defined $body->{$param};
     }
-
-    my $recvWindow = $self->{'recvWindow'};
+    
+    my $recvWindow = 6000;
+    $recvWindow = $self->{'recvWindow'} if defined $self->{'recvWindow'};
     my $timestamp = int Time::HiRes::time * 1000 if $params->{'signed'};
     my $uri = URI->new( BASE_URL . $path );
     my $full_path;
