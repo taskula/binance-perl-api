@@ -42,6 +42,7 @@ sub new {
     my $self = {
         apiKey    => $params{'apiKey'},
         secretKey => $params{'secretKey'},
+        recvWindow => $params{'recvWindow'},
         logger    => $params{'logger'},
     };
 
@@ -119,8 +120,11 @@ sub _init {
         delete $body->{$param} unless defined $body->{$param};
     }
 
-    my $recvWindow = $self->{'recvWindow'};
-    $recvWindow //= 5000 if $params->{signed};
+    my $recvWindow;
+    if ($params->{signed}) {
+        $recvWindow = defined $self->{'recvWindow'}
+            ? $self->{'recvWindow'} : 5000;
+    }
 
     my $timestamp = int Time::HiRes::time * 1000 if $params->{'signed'};
     my $uri = URI->new( BASE_URL . $path );
@@ -132,17 +136,17 @@ sub _init {
         if (!defined $query->{'recvWindow'} && defined $recvWindow) {
             $query->{'recvWindow'} = $recvWindow;
         }
-        elsif (!defined $b->{'recvWindow'} && defined $recvWindow) {
+        elsif (!defined $body->{'recvWindow'} && defined $recvWindow) {
             $body->{'recvWindow'} = $recvWindow;
         }
 
-        my $body_params = $uri->clone->query_form($body);
-        my $query_params = $uri->query_form($query);
+        $uri->clone->query_form($body);
+        $uri->query_form($query);
         $full_path = $uri->as_string;
-        $body_params->{signature} = hmac_sha256_hex(
-            { %$body_params, %$query_params }, $self->{secretKey}
+        $body->{signature} = hmac_sha256_hex(
+            { %$body, %$query }, $self->{secretKey}
         ) if $params->{signed};
-        $data{'Content'} = $body_params;
+        $data{'Content'} = $body;
     }
     # Query parameters only
     elsif (keys %$query || !keys %$query && !keys %$body) {
@@ -164,7 +168,7 @@ sub _init {
     # Body parameters only
     elsif (keys %$body) {
         $body->{'timestamp'} = $timestamp if defined $timestamp;
-        if (!defined $b->{'recvWindow'} && defined $recvWindow) {
+        if (!defined $body->{'recvWindow'} && defined $recvWindow) {
             $body->{'recvWindow'} = $recvWindow;
         }
 
