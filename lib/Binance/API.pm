@@ -823,6 +823,48 @@ sub cancelOrder {
     return $self->ua->delete('/api/v3/order', { signed => 1, body => $body } );
 }
 
+=head2 Current open orders (USER_DATA)
+
+$api->openOrders();
+
+Get all open orders on a symbol. Careful when accessing this with no symbol.
+
+PARAMETERS:
+- symbol            [OPTIONAL]
+- recvWindow        [OPTIONAL]
+
+RETURNS:
+[
+  {
+    "symbol": "LTCBTC",
+    "orderId": 1,
+    "clientOrderId": "myOrder1",
+    "price": "0.1",
+    "origQty": "1.0",
+    "executedQty": "0.0",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.0",
+    "icebergQty": "0.0",
+    "time": 1499827319559,
+    "isWorking": trueO
+  }
+]
+
+=cut
+
+sub openOrders {
+    my ($self, %params) = @_;
+
+    my $query = {
+        symbol     => $params{'symbol'},
+        recvWindow => $params{'recvWindow'},
+    };
+    return $self->ua->get('/api/v3/openOrders', { signed => 1, query => $query } );
+}
+
 =head2 All orders (USER_DATA)
 
 $api->allOrders();
@@ -874,6 +916,177 @@ sub allOrders {
     };
     return $self->ua->get('/api/v3/allOrders', { signed => 1, query => $query } );
 }
+
+=head2 Account information (USER_DATA)
+
+$api->account();
+
+Get current account information.
+
+PARAMETERS:
+- recvWindow            [OPTIONAL]
+
+RETURNS:
+{
+  "makerCommission": 15,
+  "takerCommission": 15,
+  "buyerCommission": 0,
+  "sellerCommission": 0,
+  "canTrade": true,
+  "canWithdraw": true,
+  "canDeposit": true,
+  "updateTime": 123456789,
+  "balances": [
+    {
+      "asset": "BTC",
+      "free": "4723846.89208129",
+      "locked": "0.00000000"
+    },
+    {
+      "asset": "LTC",
+      "free": "4763368.68006011",
+      "locked": "0.00000000"
+    }
+  ]
+}
+
+=cut
+
+sub account {
+    my ($self, %params) = @_;
+
+    my $query = {
+        recvWindow => $params{'recvWindow'},
+    };
+    return $self->ua->get('/api/v3/account', { signed => 1, query => $query } );
+}
+
+=head2 Account trade list (USER_DATA)
+
+$api->myTrades();
+
+Get trades for a specific account and symbol.
+
+PARAMETERS:
+- symbol            [REQUIRED]
+- limit             [OPTIONAL] Default 500; max 500.
+- fromId            [OPTIONAL] TradeId to fetch from. Default gets most recent trades.
+- recvWindow        [OPTIONAL]
+
+RETURNS:
+[
+  {
+    "id": 28457,
+    "orderId": 100234,
+    "price": "4.00000100",
+    "qty": "12.00000000",
+    "commission": "10.10000000",
+    "commissionAsset": "BNB",
+    "time": 1499865549590,
+    "isBuyer": true,
+    "isMaker": false,
+    "isBestMatch": true
+  }
+]
+
+=cut
+
+sub myTrades {
+    my ($self, %params) = @_;
+    unless ($params{'symbol'}) {
+        $self->log->error('Parameter "symbol" required');
+        Binance::Exception::Parameter::Required->throw(
+            error => 'Parameter "symbol" required',
+            parameters => ['symbol']
+        );
+    }
+    my $query = {
+        symbol     => $params{'symbol'},
+        limit      => $params{'limit'},
+        fromId    => $params{'fromId'},
+        recvWindow => $params{'recvWindow'},
+    };
+    return $self->ua->get('/api/v3/myTrades', { signed => 1, query => $query } );
+}
+
+=head2 Start user data stream (USER_STREAM)
+
+$api->startUserDataStream();
+
+Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
+
+PARAMETERS:
+       NONE
+
+RETURNS:
+{
+  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
+}
+
+=cut
+
+sub startUserDataStream {
+    return $_[0]->ua->post('/api/v1/ticker/userDataStream');
+}
+
+=head2 Keepalive user data stream (USER_STREAM)
+
+$api->keepAliveuserDataStream();
+
+Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
+
+PARAMETERS:
+- listenKey          [REQUIRED]
+
+RETURNS:
+{}
+
+=cut
+
+sub keepAliveuserDataStream {
+    my ($self, %params) = @_;
+    unless ($params{'listenKey'}) {
+        $self->log->error('Parameter "listenKey" required');
+        Binance::Exception::Parameter::Required->throw(
+            error => 'Parameter "listenKey" required',
+            parameters => ['listenKey']
+        );
+    }
+    my $query = {
+        listenKey  => $params{'listenKey'},
+    };
+    return $self->ua->put('/api/v1/userDataStream', { query => $query } );
+}
+
+=head2 Close user data stream (USER_STREAM)
+
+$api->deleteUserDataStream();
+
+Close out a user data stream.
+
+PARAMETERS:
+- listenKey          [REQUIRED]
+
+RETURNS:
+{}
+
+=cut
+
+sub deleteUserDataStream {
+    my ($self, %params) = @_;
+    unless ($params{'listenKey'}) {
+        $self->log->error('Parameter "listenKey" required');
+        Binance::Exception::Parameter::Required->throw(
+            error => 'Parameter "listenKey" required',
+            parameters => ['listenKey']
+        );
+    }
+    my $query = {
+        listenKey  => $params{'listenKey'},
+    };
+    return $self->ua->delete('/api/v1/userDataStream', { query => $query } );
+}
+
 
 sub log { return $_[0]->{logger}; }
 sub ua  { return $_[0]->{ua}; }
