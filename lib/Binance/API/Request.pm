@@ -40,10 +40,10 @@ sub new {
     my %params = @_;
 
     my $self = {
-        apiKey    => $params{'apiKey'},
-        secretKey => $params{'secretKey'},
+        apiKey     => $params{'apiKey'},
+        secretKey  => $params{'secretKey'},
         recvWindow => $params{'recvWindow'},
-        logger    => $params{'logger'},
+        logger     => $params{'logger'},
     };
 
     bless $self, $class;
