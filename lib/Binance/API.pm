@@ -2,7 +2,7 @@ package Binance::API;
 
 # MIT License
 #
-# Copyright (c) 2017 Lari Taskula  <lari@taskula.fi>
+# Copyright (c) 2018 Lari Taskula  <lari@taskula.fi>, Filip La Gre <tutenhamond@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
