@@ -2,7 +2,9 @@ package Binance::API;
 
 # MIT License
 #
-# Copyright (c) 2018 Lari Taskula  <lari@taskula.fi>, Filip La Gre <tutenhamond@gmail.com>
+# Copyright (c) 2018
+# Lari Taskula  <lari@taskula.fi>
+# Filip La Gre <tutenhamond@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -122,7 +124,7 @@ sub ping {
     return keys %{$_[0]->ua->get('/api/v1/ping')} == 0 ? 1 : 0;
 }
 
-=head2 Check server time
+=head2 time
 
 $api->time();
 
@@ -143,11 +145,11 @@ sub time {
     return exists $time->{serverTime} ? $time->{serverTime} : 0;
 }
 
-=head2 Exchange information
+=head2 exchange_info
 
-$api->exchangeInfo();
+$api->exchange_info();
 
-Current exchange trading rules and symbol information
+Current exchange trading rules and symbol information.
 
 PARAMETERS:
     NONE
@@ -201,15 +203,15 @@ RETURNS:
 
 =cut
 
-sub exchangeInfo {
+sub exchange_info {
     return $_[0]->ua->get('/api/v1/ticker/exchangeInfo');
 }
 
 =head2 all_prices
 
-my $all_prices = $api->all_prices();
+$api->all_prices();
 
-Latest price for all symbols
+Latest price for all symbols.
 
 PARAMETERS:
     NONE
@@ -238,7 +240,7 @@ sub all_prices {
 
 =head2 depth
 
-my $depth = $api->depth( symbol => 'ETHBTC' );
+$api->depth( symbol => 'ETHBTC' );
 
 PARAMETERS:
 - symbol [REQUIRED] Symbol, for example ETHBTC
@@ -288,7 +290,7 @@ sub depth {
     return $self->ua->get('/api/v1/depth', { query => $query } );
 }
 
-=head2 Recent trades list
+=head2 trades
 
 $api->trades();
 
@@ -331,16 +333,17 @@ sub trades {
     return $self->ua->get('/api/v1/trades', { query => $query } );
 }
 
-=head2 Old trade lookup (MARKET_DATA)
+=head2 historical_trades
 
-$api->historicalTrades();
+$api->historical_trades();
 
 Get older trades.
 
 PARAMETERS:
 - symbol           [REQUIRED]
 - limit            [OPTIONAL] Default 500; max 500.
-- fromId           [OPTIONAL] TradeId to fetch from. Default gets most recent trades.
+- fromId           [OPTIONAL] TradeId to fetch from. Default gets most recent
+                              trades.
 
 RETURNS:
 [
@@ -356,7 +359,7 @@ RETURNS:
 
 =cut
 
-sub historicalTrades {
+sub historical_trades {
     my ($self, %params) = @_;
 
     unless ($params{'symbol'}) {
@@ -378,10 +381,10 @@ sub historicalTrades {
 
 =head2 aggregate_trades
 
-my $aggTrades = $api->aggregate_trades( symbol => 'ETHBTC' );
+$api->aggregate_trades( symbol => 'ETHBTC' );
 
 Gets compressed, aggregate trades. Trades that fill at the time, from the same
-order, with the same price will have the quantity aggregated
+order, with the same price will have the quantity aggregated.
 
 PARAMETERS:
 - symbol    [REQUIRED] Symbol, for example ETHBTC
@@ -434,10 +437,10 @@ sub aggregate_trades {
 
 =head2 klines
 
-my $klines = $api->klines( symbol => 'ETHBTC', interval => '1M' );
+$api->klines( symbol => 'ETHBTC', interval => '1M' );
 
-Kline/candlestick bars for a symbol. Klines are uniquely identified by their open
-time
+Kline/candlestick bars for a symbol. Klines are uniquely identified by their
+open time.
 
 PARAMETERS:
 - symbol    [REQUIRED] Symbol, for example ETHBTC
@@ -502,9 +505,9 @@ sub klines {
 
 =head2 ticker
 
-my $ticker = $api->klines( symbol => 'ETHBTC', interval => '1M' );
+$api->klines( symbol => 'ETHBTC', interval => '1M' );
 
-24 hour price change statistics
+24 hour price change statistics.
 
 PARAMETERS:
 - symbol [REQUIRED] Symbol, for example ETHBTC
@@ -553,9 +556,9 @@ sub ticker {
     return $self->ua->get('/api/v1/ticker/24hr', { query => $query } );
 }
 
-=head2 Symbol price ticker
+=head2 ticker_price
 
-$api->tickerPrice();
+$api->ticker_price();
 
 Latest price for a symbol or symbols.
 
@@ -581,7 +584,7 @@ OR
 
 =cut
 
-sub tickerPrice {
+sub ticker_price {
     my ($self, %params) = @_;
 
     my $query = {
@@ -593,9 +596,9 @@ sub tickerPrice {
 
 =head2 all_book_tickers
 
-my $all_book_tickers = $api->all_book_tickers();
+$api->all_book_tickers();
 
-Best price/qty on the order book for all symbols
+Best price/qty on the order book for all symbols.
 
 PARAMETERS:
     NONE
@@ -628,9 +631,9 @@ sub all_book_tickers {
     return $_[0]->ua->get('/api/v1/ticker/allBookTickers');
 }
 
-=head2 Symbol order book ticker
+=head2 book_ticker
 
-$api->bookTicker();
+$api->book_ticker();
 
 Best price/qty on the order book for a symbol or symbols.
 
@@ -648,7 +651,7 @@ RETURNS:
 
 =cut
 
-sub bookTicker {
+sub book_ticker {
     my ($self, %params) = @_;
 
     my $query = {
@@ -669,7 +672,7 @@ my $order = $api->order(
     price => 0.1
 );
 
-Send in a new order
+Send in a new order.
 
 PARAMETERS:
 - symbol           [REQUIRED] Symbol, for example ETHBTC
@@ -700,7 +703,9 @@ RETURNS:
 sub order {
     my ($self, %params) = @_;
 
-    my @required = ('symbol', 'side', 'type', 'timeInForce', 'quantity', 'price');
+    my @required = (
+        'symbol', 'side', 'type', 'timeInForce', 'quantity', 'price'
+    );
     foreach my $param (@required) {
         unless (defined ($params{$param})) {
             $self->log->error('Parameter "'.$param.'" required');
@@ -726,11 +731,12 @@ sub order {
     return $self->ua->post('/api/v3/order', { signed => 1, body => $body } );
 }
 
-=head2 Test new order (TRADE)
+=head2 order_test
 
-$api->orderTest();
+$api->order_test();
 
-Test new order creation and signature/recvWindow long. Creates and validates a new order but does not send it into the matching engine.
+Test new order creation and signature/recvWindow long. Creates and validates
+a new order but does not send it into the matching engine.
 
 PARAMETERS:
 - symbol           [REQUIRED] Symbol, for example ETHBTC
@@ -749,10 +755,12 @@ RETURNS:
 
 =cut
 
-sub orderTest {
+sub order_test {
     my ($self, %params) = @_;
 
-    my @required = ('symbol', 'side', 'type', 'timeInForce', 'quantity', 'price');
+    my @required = (
+        'symbol', 'side', 'type', 'timeInForce', 'quantity', 'price'
+    );
     foreach my $param (@required) {
         unless (defined ($params{$param})) {
             $self->log->error('Parameter "'.$param.'" required');
@@ -775,12 +783,14 @@ sub orderTest {
         icebergQty       => $params{'icebergQty'},
     };
 
-    return $self->ua->post('/api/v3/order/test', { signed => 1, body => $body } );
+    return $self->ua->post(
+        '/api/v3/order/test', { signed => 1, body => $body }
+    );
 }
 
-=head2 Cancel order (TRADE)
+=head2 cancel_order
 
-$api->cancelOrder();
+$api->cancel_order();
 
 Cancel an active order.
 
@@ -788,7 +798,8 @@ PARAMETERS:
 - symbol             [REQUIRED]
 - orderId            [OPTIONAL]
 - origClientOrderId  [OPTIONAL]
-- newClientOrderId   [OPTIONAL] Used to uniquely identify this cancel. Automatically generated by default.
+- newClientOrderId   [OPTIONAL] Used to uniquely identify this cancel.
+                                Automatically generated by default.
 - recvWindow         [OPTIONAL]
 
 RETURNS:
@@ -801,7 +812,7 @@ RETURNS:
 
 =cut
 
-sub cancelOrder {
+sub cancel_order {
     my ($self, %params) = @_;
 
     unless ($params{'symbol'}) {
@@ -823,9 +834,9 @@ sub cancelOrder {
     return $self->ua->delete('/api/v3/order', { signed => 1, body => $body } );
 }
 
-=head2 Current open orders (USER_DATA)
+=head2 open_orders
 
-$api->openOrders();
+$api->open_orders();
 
 Get all open orders on a symbol. Careful when accessing this with no symbol.
 
@@ -855,19 +866,21 @@ RETURNS:
 
 =cut
 
-sub openOrders {
+sub open_orders {
     my ($self, %params) = @_;
 
     my $query = {
         symbol     => $params{'symbol'},
         recvWindow => $params{'recvWindow'},
     };
-    return $self->ua->get('/api/v3/openOrders', { signed => 1, query => $query } );
+    return $self->ua->get(
+        '/api/v3/openOrders', { signed => 1, query => $query }
+    );
 }
 
-=head2 All orders (USER_DATA)
+=head2 all_orders
 
-$api->allOrders();
+$api->all_orders();
 
 Get all account orders; active, canceled, or filled.
 
@@ -899,7 +912,7 @@ RETURNS:
 
 =cut
 
-sub allOrders {
+sub all_orders {
     my ($self, %params) = @_;
     unless ($params{'symbol'}) {
         $self->log->error('Parameter "symbol" required');
@@ -914,10 +927,12 @@ sub allOrders {
         limit      => $params{'limit'},
         recvWindow => $params{'recvWindow'},
     };
-    return $self->ua->get('/api/v3/allOrders', { signed => 1, query => $query } );
+    return $self->ua->get('/api/v3/allOrders',
+        { signed => 1, query => $query }
+    );
 }
 
-=head2 Account information (USER_DATA)
+=head2 account
 
 $api->account();
 
@@ -961,16 +976,17 @@ sub account {
     return $self->ua->get('/api/v3/account', { signed => 1, query => $query } );
 }
 
-=head2 Account trade list (USER_DATA)
+=head2 my_trades
 
-$api->myTrades();
+$api->my_trades();
 
 Get trades for a specific account and symbol.
 
 PARAMETERS:
 - symbol            [REQUIRED]
 - limit             [OPTIONAL] Default 500; max 500.
-- fromId            [OPTIONAL] TradeId to fetch from. Default gets most recent trades.
+- fromId            [OPTIONAL] TradeId to fetch from. Default gets most recent
+                               trades.
 - recvWindow        [OPTIONAL]
 
 RETURNS:
@@ -991,7 +1007,7 @@ RETURNS:
 
 =cut
 
-sub myTrades {
+sub my_trades {
     my ($self, %params) = @_;
     unless ($params{'symbol'}) {
         $self->log->error('Parameter "symbol" required');
@@ -1006,14 +1022,17 @@ sub myTrades {
         fromId    => $params{'fromId'},
         recvWindow => $params{'recvWindow'},
     };
-    return $self->ua->get('/api/v3/myTrades', { signed => 1, query => $query } );
+    return $self->ua->get(
+        '/api/v3/myTrades', { signed => 1, query => $query }
+    );
 }
 
-=head2 Start user data stream (USER_STREAM)
+=head2 start_user_data_stream
 
-$api->startUserDataStream();
+$api->start_user_data_stream();
 
-Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
+Start a new user data stream. The stream will close after 60 minutes unless
+a keepalive is sent.
 
 PARAMETERS:
        NONE
@@ -1025,15 +1044,16 @@ RETURNS:
 
 =cut
 
-sub startUserDataStream {
+sub start_user_data_stream {
     return $_[0]->ua->post('/api/v1/ticker/userDataStream');
 }
 
-=head2 Keepalive user data stream (USER_STREAM)
+=head2 keep_alive_user_data_stream
 
-$api->keepAliveuserDataStream();
+$api->keep_alive_user_data_stream();
 
-Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
+Keepalive a user data stream to prevent a time out. User data streams will close
+after 60 minutes. It's recommended to send a ping about every 30 minutes.
 
 PARAMETERS:
 - listenKey          [REQUIRED]
@@ -1043,7 +1063,7 @@ RETURNS:
 
 =cut
 
-sub keepAliveuserDataStream {
+sub keep_alive_user_data_stream {
     my ($self, %params) = @_;
     unless ($params{'listenKey'}) {
         $self->log->error('Parameter "listenKey" required');
@@ -1058,9 +1078,9 @@ sub keepAliveuserDataStream {
     return $self->ua->put('/api/v1/userDataStream', { query => $query } );
 }
 
-=head2 Close user data stream (USER_STREAM)
+=head2 delete_user_data_stream
 
-$api->deleteUserDataStream();
+$api->delete_user_data_stream();
 
 Close out a user data stream.
 
@@ -1072,7 +1092,7 @@ RETURNS:
 
 =cut
 
-sub deleteUserDataStream {
+sub delete_user_data_stream {
     my ($self, %params) = @_;
     unless ($params{'listenKey'}) {
         $self->log->error('Parameter "listenKey" required');
