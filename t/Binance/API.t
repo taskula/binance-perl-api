@@ -105,8 +105,8 @@ subtest 'depth() tests' => sub {
 
     my $depth = $api->depth( symbol => 'ETHBTC' );
     ok(defined $depth, 'Requested depth');
-    ok(values @{$depth->{'asks'}} > 0 , 'Depth has returned some asks');
-    ok(values @{$depth->{'bids'}} > 0 , 'Depth has returned some bids');
+    ok(@{$depth->{'asks'}} > 0 , 'Depth has returned some asks');
+    ok(@{$depth->{'bids'}} > 0 , 'Depth has returned some bids');
 };
 
 subtest 'klines() tests' => sub {
