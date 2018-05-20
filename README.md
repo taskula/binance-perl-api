@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/taskula/binance-perl-api.svg?branch=master)](https://travis-ci.com/taskula/binance-perl-api)
+
 # Binance::API
 
 Perl module for interacting with the [Binance API](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.mdl).
