@@ -644,7 +644,7 @@ B<PARAMETERS>
 
 =over
 
-=limit symbol
+=item symbol
 
 [OPTIONAL] Symbol, for example C<ETHBTC>. If not given, returns prices of all
 symbols.
@@ -1343,6 +1343,7 @@ sub keep_alive_user_data_stream {
 Close out a user data stream.
 
 B<PARAMETERS>
+
 =over
 
 =item listenKey
