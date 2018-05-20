@@ -34,4 +34,9 @@ our $required = {
         => '5.837',
 };
 
+our $required_test = {
+    'Test::More'
+        => '0.88',
+};
+
 1;

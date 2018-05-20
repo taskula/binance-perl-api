@@ -37,4 +37,20 @@ WriteMakefile(
     ABSTRACT        => 'Perl module for interacting with the Binance API.',
     PREREQ_PM       => $Binance::PerlDependencies::required,
     PREREQ_FATAL    => 1,
+    TEST_REQUIRES   => $Binance::PerlDependencies::required_test,
+    META_MERGE      => {
+        'meta-spec' => { version => 2 },
+        resources => {
+            bugtracker => {
+                web => 'https://github.com/taskula/binance-perl-api/issues'
+            },
+            homepage => 'https://github.com/taskula/binance-perl-api',
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/taskula/binance-perl-api.git',
+                web  => 'https://github.com/taskula/binance-perl-api',
+            },
+        },
+    },
+    test => { TESTS => 't/*.t t/*/*.t'},
 );
