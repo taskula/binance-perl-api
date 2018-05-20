@@ -72,7 +72,7 @@ https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-a
         secretKey => 'my_secret_key',
     );
 
-Instantiates a new Binance::API object
+Instantiates a new C<Binance::API> object
 
 B<PARAMETERS>
 
@@ -93,8 +93,7 @@ signed requests.
 
 =item logger
 
-[OPTIONAL] A logger object that implements (at least) debug, warn,
-error, fatal level logging. Log::Log4perl recommended.
+[OPTIONAL] See L<Binance::API::Logger/new>
 
 =back
 
@@ -1374,7 +1373,7 @@ sub delete_user_data_stream {
     return $self->ua->delete('/api/v1/userDataStream', { query => $query } );
 }
 
-=head3 log
+=head2 log
 
     $api->log->warn("This is a warning");
 
@@ -1388,13 +1387,13 @@ B<PARAMETERS>
 
 B<RETURNS>
 
-    An instance of C<Binance::API::Logger>.
+An instance of L<Binance::API::Logger>.
 
 =cut
 
 sub log { return $_[0]->{logger}; }
 
-=head3 ua
+=head2 ua
 
     $api->ua->get('/binance/endpoint');
 
@@ -1408,7 +1407,7 @@ B<PARAMETERS>
 
 B<RETURNS>
 
-    An instance of C<Binance::API::Request>.
+An instance of L<Binance::API::Request>.
 
 =cut
 

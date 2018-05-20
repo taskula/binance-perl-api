@@ -29,6 +29,50 @@ use Carp;
 
 use Binance::Constants qw( :all );
 
+=head1 NAME
+
+Binance::API::Logger -- Logger for L<Binance::API>
+
+=head1 DESCRIPTION
+
+Provides a wrapper for your desired logger. Carps log calls higher than "debug"
+level
+
+=head1 SYNOPSIS
+
+    use Binance::API;
+
+    my $logger = Binance::API::Logger->new($log4perl);
+
+    $logger->warn("This is a warning");
+
+=head1 METHODS
+
+=cut
+
+=head2 new
+
+    my $logger = Binance::API::Logger->new($log4perl);
+
+Instantiates a new C<Binance::API::Logger> object.
+
+B<PARAMETERS>
+
+=over
+
+=item A logger object that implements (at least) debug, warn,
+error, fatal level logging.
+
+[OPTIONAL]
+
+=back
+
+B<RETURNS>
+
+A C<Binance::API::Logger> object.
+
+=cut
+
 sub new {
     my $class = shift;
 

@@ -35,6 +35,17 @@ use Binance::Constants qw( :all );
 
 use Binance::Exception::Parameter::Required;
 
+=head1 NAME
+
+Binance::API::Request -- LWP::UserAgent wrapper for L<Binance::API>
+
+=head1 DESCRIPTION
+
+This module provides a wrapper for LWP::UserAgent. Generates required parameters
+for Binance API requests.
+
+=cut
+
 sub new {
     my $class = shift;
     my %params = @_;
