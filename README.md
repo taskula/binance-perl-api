@@ -1,6 +1,6 @@
 # Binance::API
 
-Perl module for interacting with the [Binance API](https://www.binance.com/restapipub.html).
+Perl module for interacting with the [Binance API](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.mdl).
 
 ### Perl dependencies
 
@@ -42,13 +42,7 @@ prove t/*
 ## Usage
 
 ```
-#!/usr/bin/perl
-
-use strict;
-use warnings;
-
 use Binance::API;
-use Data::Dumper;
 
 my $api = Binance::API->new(
     apiKey => 'my_api_key',
@@ -56,13 +50,7 @@ my $api = Binance::API->new(
 );
 
 my $ticker = $api->ticker( symbol => 'ETHBTC' );
-
-warn Dumper $ticker;
 ```
-
-See lib/Binance/API.pm for full list of available methods.
-
-(thanks to @ibrierley, https://github.com/taskula/binance-perl-api/issues/1#issuecomment-390226345)
 
 ## Contributing
 

@@ -39,27 +39,27 @@ our $VERSION = '1.00';
 
 =head1 NAME
 
-Binance::API
+Binance::API -- Perl implementation for Binance API
 
 =head1 DESCRIPTION
 
 This module provides a Perl implementation for Binance API
 
-Binance API documentation: C<https://www.binance.com/restapipub.html>.
+Binance API documentation: C<https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md>.
 
 ENUM definitions:
-https://www.binance.com/restapipub.html#user-content-enum-definitions
+https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#enum-definitions
 
 =head1 SYNOPSIS
 
-use Binance::API;
+    use Binance::API;
 
-my $api = Binance::API->new(
-    apiKey    => 'my_api_key',
-    secretKey => 'my_secret_key',
-);
+    my $api = Binance::API->new(
+        apiKey    => 'my_api_key',
+        secretKey => 'my_secret_key',
+    );
 
-my $ticker = $api->ticker( symbol => 'ETHBTC' );
+    my $ticker = $api->ticker( symbol => 'ETHBTC' );
 
 =head1 METHODS
 
@@ -67,22 +67,40 @@ my $ticker = $api->ticker( symbol => 'ETHBTC' );
 
 =head2 new
 
-my $api = Binance::API->new(
-    apiKey    => 'my_api_key',
-    secretKey => 'my_secret_key',
-);
+    my $api = Binance::API->new(
+        apiKey    => 'my_api_key',
+        secretKey => 'my_secret_key',
+    );
 
 Instantiates a new Binance::API object
 
-PARAMETERS:
-- apiKey     [OPTIONAL] Your Binance API key
-- secretKey  [OPTIONAL] Your Binance API secret key
-- recvWindow [OPTIONAL] Number of milliseconds the request is valid for
-- logger     [OPTIONAL] A logger object that implements (at least) debug, warn,
-                        error, fatal level logging. Log::Log4perl recommended.
+B<PARAMETERS>
 
-RETURNS:
-    A Binance::API object
+=over
+
+=item apiKey
+
+[OPTIONAL] Your Binance API key.
+
+=item secretKey
+
+[OPTIONAL] Your Binance API secret key.
+
+=item recvWindow
+
+[OPTIONAL] Number of milliseconds the request is valid for. Applies only in
+signed requests.
+
+=item logger
+
+[OPTIONAL] A logger object that implements (at least) debug, warn,
+error, fatal level logging. Log::Log4perl recommended.
+
+=back
+
+B<RETURNS>:
+
+A C<Binance::API> object.
 
 =cut
 
@@ -108,14 +126,20 @@ sub new {
 
 =head2 ping
 
-$api->ping();
+    $api->ping();
 
 Test connectivity to the Rest API
 
-PARAMETERS:
-    NONE
+B<PARAMETERS>
 
-RETURNS:
+=over
+
+=item Takes no parameters.
+
+=back
+
+
+B<RETURNS>:
 1 if successful, otherwise 0
 
 =cut
@@ -126,14 +150,19 @@ sub ping {
 
 =head2 time
 
-$api->time();
+    $api->time();
 
 Test connectivity to the Rest API and get the current server time.
 
-PARAMETERS:
-    NONE
+B<PARAMETERS>
 
-RETURNS:
+=over
+
+=item Takes no parameters.
+
+=back
+
+B<RETURNS>:
     Server (epoch) time in milliseconds
 
 =cut
@@ -147,59 +176,66 @@ sub time {
 
 =head2 exchange_info
 
-$api->exchange_info();
+    $api->exchange_info();
 
 Current exchange trading rules and symbol information.
 
-PARAMETERS:
-    NONE
+B<PARAMETERS>
 
-RETURNS:
-{
-  "timezone": "UTC",
-  "serverTime": 1508631584636,
-  "rateLimits": [{
-      "rateLimitType": "REQUESTS",
-      "interval": "MINUTE",
-      "limit": 1200
-    },
+=over
+
+=item Takes no parameters.
+
+=back
+
+B<RETURNS>:
+    A HASHref
+
     {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "limit": 10
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "limit": 100000
+      "timezone": "UTC",
+      "serverTime": 1508631584636,
+      "rateLimits": [{
+          "rateLimitType": "REQUESTS",
+          "interval": "MINUTE",
+          "limit": 1200
+        },
+        {
+          "rateLimitType": "ORDERS",
+          "interval": "SECOND",
+          "limit": 10
+        },
+        {
+          "rateLimitType": "ORDERS",
+          "interval": "DAY",
+          "limit": 100000
+        }
+      ],
+      "exchangeFilters": [],
+      "symbols": [{
+        "symbol": "ETHBTC",
+        "status": "TRADING",
+        "baseAsset": "ETH",
+        "baseAssetPrecision": 8,
+        "quoteAsset": "BTC",
+        "quotePrecision": 8,
+        "orderTypes": ["LIMIT", "MARKET"],
+        "icebergAllowed": false,
+        "filters": [{
+          "filterType": "PRICE_FILTER",
+          "minPrice": "0.00000100",
+          "maxPrice": "100000.00000000",
+          "tickSize": "0.00000100"
+        }, {
+          "filterType": "LOT_SIZE",
+          "minQty": "0.00100000",
+          "maxQty": "100000.00000000",
+          "stepSize": "0.00100000"
+        }, {
+          "filterType": "MIN_NOTIONAL",
+          "minNotional": "0.00100000"
+        }]
+      }]
     }
-  ],
-  "exchangeFilters": [],
-  "symbols": [{
-    "symbol": "ETHBTC",
-    "status": "TRADING",
-    "baseAsset": "ETH",
-    "baseAssetPrecision": 8,
-    "quoteAsset": "BTC",
-    "quotePrecision": 8,
-    "orderTypes": ["LIMIT", "MARKET"],
-    "icebergAllowed": false,
-    "filters": [{
-      "filterType": "PRICE_FILTER",
-      "minPrice": "0.00000100",
-      "maxPrice": "100000.00000000",
-      "tickSize": "0.00000100"
-    }, {
-      "filterType": "LOT_SIZE",
-      "minQty": "0.00100000",
-      "maxQty": "100000.00000000",
-      "stepSize": "0.00100000"
-    }, {
-      "filterType": "MIN_NOTIONAL",
-      "minNotional": "0.00100000"
-    }]
-  }]
-}
 
 =cut
 
@@ -209,14 +245,24 @@ sub exchange_info {
 
 =head2 depth
 
-$api->depth( symbol => 'ETHBTC' );
+    $api->depth( symbol => 'ETHBTC' );
 
-PARAMETERS:
-- symbol [REQUIRED] Symbol, for example ETHBTC
-- limit  [OPTIONAL] Default 100; max 100.
+B<PARAMETERS>
 
-RETURNS:
-    A HASHref:
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item limit
+
+[OPTIONAL] Default 100; max 100.
+
+=back
+
+B<RETURNS>:
+    A HASHref
 
     {
       "lastUpdateId": 1027024,
@@ -235,8 +281,6 @@ RETURNS:
         ]
       ]
     }
-
-    (Source: Binance API documentation)
 
 =cut
 
@@ -261,25 +305,37 @@ sub depth {
 
 =head2 trades
 
-$api->trades();
+    $api->trades();
 
 Get recent trades (up to last 500).
 
-PARAMETERS:
-- symbol           [REQUIRED]
-- limit            [OPTIONAL] Default 500; max 500.
+B<PARAMETERS>
 
-RETURNS:
-[
-  {
-    "id": 28457,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "time": 1499865549590,
-    "isBuyerMaker": true,
-    "isBestMatch": true
-  }
-]
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item limit
+
+[OPTIONAL] Default 500; max 500.
+
+=back
+
+B<RETURNS>:
+    An ARRAYref of HASHrefs
+
+    [
+      {
+        "id": 28457,
+        "price": "4.00000100",
+        "qty": "12.00000000",
+        "time": 1499865549590,
+        "isBuyerMaker": true,
+        "isBestMatch": true
+      }
+    ]
 
 =cut
 
@@ -308,23 +364,37 @@ $api->historical_trades();
 
 Get older trades.
 
-PARAMETERS:
-- symbol           [REQUIRED]
-- limit            [OPTIONAL] Default 500; max 500.
-- fromId           [OPTIONAL] TradeId to fetch from. Default gets most recent
-                              trades.
+B<PARAMETERS>
 
-RETURNS:
-[
-  {
-    "id": 28457,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "time": 1499865549590,
-    "isBuyerMaker": true,
-    "isBestMatch": true
-  }
-]
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item limit
+
+[OPTIONAL] Default 500; max 500.
+
+=item fromId
+
+[OPTIONAL] TradeId to fetch from. Default gets most recent trades.
+
+=back
+
+B<RETURNS>:
+    An ARRAYref of HASHrefs
+
+    [
+      {
+        "id": 28457,
+        "price": "4.00000100",
+        "qty": "12.00000000",
+        "time": 1499865549590,
+        "isBuyerMaker": true,
+        "isBestMatch": true
+      }
+    ]
 
 =cut
 
@@ -350,20 +420,40 @@ sub historical_trades {
 
 =head2 aggregate_trades
 
-$api->aggregate_trades( symbol => 'ETHBTC' );
+    $api->aggregate_trades( symbol => 'ETHBTC' );
 
 Gets compressed, aggregate trades. Trades that fill at the time, from the same
 order, with the same price will have the quantity aggregated.
 
-PARAMETERS:
-- symbol    [REQUIRED] Symbol, for example ETHBTC
-- fromId    [OPTIONAL] ID to get aggregate trades from INCLUSIVE
-- startTime [OPTIONAL] timestamp in ms to get aggregate trades from INCLUSIVE
-- endTime   [OPTIONAL] timestamp in ms to get aggregate trades until INCLUSIVE
-- limit     [OPTIONAL] Default 500; max 500.
+B<PARAMETERS>
 
-RETURNS:
-    An array of HASHrefs:
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item fromId
+
+[OPTIONAL] ID to get aggregate trades from INCLUSIVE.
+
+
+=item startTime
+
+[OPTIONAL] timestamp in ms to get aggregate trades from INCLUSIVE.
+
+=item endTime
+
+[OPTIONAL] timestamp in ms to get aggregate trades until INCLUSIVE.
+
+=item limit
+
+[OPTIONAL] Default 500; max 500.
+
+=back
+
+B<RETURNS>:
+    An ARRAYref of HASHrefs
 
     [
       {
@@ -377,8 +467,6 @@ RETURNS:
         "M": true           // Was the trade the best price match?
       }
     ]
-
-    (Source: Binance API documentation)
 
 =cut
 
@@ -406,20 +494,39 @@ sub aggregate_trades {
 
 =head2 klines
 
-$api->klines( symbol => 'ETHBTC', interval => '1M' );
+    $api->klines( symbol => 'ETHBTC', interval => '1M' );
 
 Kline/candlestick bars for a symbol. Klines are uniquely identified by their
 open time.
 
-PARAMETERS:
-- symbol    [REQUIRED] Symbol, for example ETHBTC
-- interval  [REQUIRED] ENUM (kline intervals), for example 1m, 1h, 1d or 1M.
-- limit     [OPTIONAL] Default 500; max 500.
-- startTime [OPTIONAL] timestamp in ms
-- endTime   [OPTIONAL] timestamp in ms
+B<PARAMETERS>
 
-RETURNS:
-    An array of ARRAYrefs:
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item interval
+
+[REQUIRED] ENUM (kline intervals), for example 1m, 1h, 1d or 1M.
+
+=item limit
+
+[OPTIONAL] Default 500; max 500.
+
+=item startTime
+
+[OPTIONAL] timestamp in ms
+
+=item endTime
+
+[OPTIONAL] timestamp in ms
+
+=back
+
+B<RETURNS>:
+    An array of ARRAYrefs
 
     [
       [
@@ -437,8 +544,6 @@ RETURNS:
         "17928899.62484339" // Can be ignored
       ]
     ]
-
-    (Source: Binance API documentation)
 
 =cut
 
@@ -474,15 +579,22 @@ sub klines {
 
 =head2 ticker
 
-$api->klines( symbol => 'ETHBTC', interval => '1M' );
+    $api->klines( symbol => 'ETHBTC', interval => '1M' );
 
 24 hour price change statistics.
 
-PARAMETERS:
-- symbol [REQUIRED] Symbol, for example ETHBTC
+B<PARAMETERS>
 
-RETURNS:
-    A HASHref:
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=back
+
+B<RETURNS>:
+    A HASHref
 
     {
       "priceChange": "-94.99999800",
@@ -502,8 +614,6 @@ RETURNS:
       "lastId": 28460,    // Last tradeId
       "count": 76         // Trade count
     }
-
-    (Source: Binance API documentation)
 
 =cut
 
@@ -527,29 +637,41 @@ sub ticker {
 
 =head2 ticker_price
 
-$api->ticker_price();
+    $api->ticker_price();
 
 Latest price for a symbol or symbols.
 
-PARAMETERS:
-- symbol            [OPTIONAL]
+B<PARAMETERS>
 
-RETURNS:
-{
-  "symbol": "LTCBTC",
-  "price": "4.00000200"
-}
-OR
-[
-  {
-    "symbol": "LTCBTC",
-    "price": "4.00000200"
-  },
-  {
-    "symbol": "ETHBTC",
-    "price": "0.07946600"
-  }
-]
+=over
+
+=limit symbol
+
+[OPTIONAL] Symbol, for example C<ETHBTC>. If not given, returns prices of all
+symbols.
+
+=back
+
+B<RETURNS>:
+    A HASHref
+
+    {
+      "symbol": "LTCBTC",
+      "price": "4.00000200"
+    }
+
+    OR an ARRAY of HASHrefs
+
+    [
+      {
+        "symbol": "LTCBTC",
+        "price": "4.00000200"
+      },
+      {
+        "symbol": "ETHBTC",
+        "price": "0.07946600"
+      }
+    ]
 
 =cut
 
@@ -565,15 +687,20 @@ sub ticker_price {
 
 =head2 all_book_tickers
 
-$api->all_book_tickers();
+    $api->all_book_tickers();
 
 Best price/qty on the order book for all symbols.
 
-PARAMETERS:
-    NONE
+B<PARAMETERS>
 
-RETURNS:
-    An array of HASHrefs:
+=over
+
+=item Takes no parameters.
+
+=back
+
+B<RETURNS>:
+    An array of HASHrefs
 
     [
       {
@@ -592,8 +719,6 @@ RETURNS:
       }
     ]
 
-    (Source: Binance API documentation)
-
 =cut
 
 sub all_book_tickers {
@@ -602,21 +727,30 @@ sub all_book_tickers {
 
 =head2 book_ticker
 
-$api->book_ticker();
+    $api->book_ticker();
 
 Best price/qty on the order book for a symbol or symbols.
 
-PARAMETERS:
-- symbol            [OPTIONAL]
+B<PARAMETERS>
 
-RETURNS:
-{
-  "symbol": "LTCBTC",
-  "bidPrice": "4.00000000",
-  "bidQty": "431.00000000",
-  "askPrice": "4.00000200",
-  "askQty": "9.00000000"
-}
+=over
+
+=item symbol
+
+[OPTIONAL] Symbol, for example C<ETHBTC>.
+
+=back
+
+B<RETURNS>:
+    A HASHref
+
+    {
+      "symbol": "LTCBTC",
+      "bidPrice": "4.00000000",
+      "bidQty": "431.00000000",
+      "askPrice": "4.00000200",
+      "askQty": "9.00000000"
+    }
 
 =cut
 
@@ -632,31 +766,62 @@ sub book_ticker {
 
 =head2 order
 
-my $order = $api->order(
-    symbol => 'ETHBTC',
-    side   => 'BUY',
-    type   => 'LIMIT',
-    timeInForce => 'GTC',
-    quantity => 1
-    price => 0.1
-);
+    $api->order(
+        symbol => 'ETHBTC',
+        side   => 'BUY',
+        type   => 'LIMIT',
+        timeInForce => 'GTC',
+        quantity => 1
+        price => 0.1
+    );
 
 Send in a new order.
 
-PARAMETERS:
-- symbol           [REQUIRED] Symbol, for example ETHBTC
-- side             [REQUIRED] BUY or SELL
-- type             [REQUIRED] LIMIT or MARKET
-- timeInForce      [REQUIRED] GTC or IOC
-- quantity         [REQUIRED] Quantity (of symbols) in order
-- price            [REQUIRED] Price (of symbol) in order
-- newClientOrderId [OPTIONAL] A unique id for the order. Automatically generated
-                              if not sent.
-- stopPrice        [OPTIONAL] Used with stop orders
-- icebergQty       [OPTIONAL] Used with iceberg orders
+B<PARAMETERS>
 
-RETURNS:
-    A HASHref:
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item side
+
+[REQUIRED] BUY or SELL.
+
+=item type
+
+[REQUIRED] LIMIT or MARKET.
+
+=item timeInForce
+
+[REQUIRED] GTC or IOC.
+
+=item quantity
+
+[REQUIRED] Quantity (of symbols) in order.
+
+=item price
+
+[REQUIRED] Price (of symbol) in order.
+
+=item newClientOrderId
+
+[OPTIONAL] A unique id for the order. Automatically generated
+if not sent.
+
+=item stopPrice
+
+[OPTIONAL] Used with stop orders.
+
+=item icebergQty
+
+[OPTIONAL] Used with iceberg orders.
+
+=back
+
+B<RETURNS>:
+    A HASHref
 
     {
       "symbol":"LTCBTC",
@@ -664,8 +829,6 @@ RETURNS:
       "clientOrderId": "myOrder1" // Will be newClientOrderId
       "transactTime": 1499827319559
     }
-
-    (Source: Binance API documentation)
 
 =cut
 
@@ -702,25 +865,58 @@ sub order {
 
 =head2 order_test
 
-$api->order_test();
+    $api->order_test();
 
 Test new order creation and signature/recvWindow long. Creates and validates
 a new order but does not send it into the matching engine.
 
-PARAMETERS:
-- symbol           [REQUIRED] Symbol, for example ETHBTC
-- side             [REQUIRED] BUY or SELL
-- type             [REQUIRED] LIMIT or MARKET
-- timeInForce      [REQUIRED] GTC or IOC
-- quantity         [REQUIRED] Quantity (of symbols) in order
-- price            [REQUIRED] Price (of symbol) in order
-- newClientOrderId [OPTIONAL] A unique id for the order. Automatically generated
-                              if not sent.
-- stopPrice        [OPTIONAL] Used with stop orders
-- icebergQty       [OPTIONAL] Used with iceberg orders
+B<PARAMETERS>
 
-RETURNS:
-{}
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item side
+
+[REQUIRED] BUY or SELL.
+
+=item type
+
+[REQUIRED] LIMIT or MARKET.
+
+=item timeInForce
+
+[REQUIRED] GTC or IOC.
+
+=item quantity
+
+[REQUIRED] Quantity (of symbols) in order.
+
+=item price
+
+[REQUIRED] Price (of symbol) in order.
+
+=item newClientOrderId
+
+[OPTIONAL] A unique id for the order. Automatically generated
+if not sent.
+
+=item stopPrice
+
+[OPTIONAL] Used with stop orders.
+
+=item icebergQty
+
+[OPTIONAL] Used with iceberg orders.
+
+=back
+
+B<RETURNS>:
+    An empty HASHref
+
+    {}
 
 =cut
 
@@ -759,25 +955,46 @@ sub order_test {
 
 =head2 cancel_order
 
-$api->cancel_order();
+    $api->cancel_order();
 
 Cancel an active order.
 
-PARAMETERS:
-- symbol             [REQUIRED]
-- orderId            [OPTIONAL]
-- origClientOrderId  [OPTIONAL]
-- newClientOrderId   [OPTIONAL] Used to uniquely identify this cancel.
-                                Automatically generated by default.
-- recvWindow         [OPTIONAL]
+B<PARAMETERS>
 
-RETURNS:
-{
-  "symbol": "LTCBTC",
-  "origClientOrderId": "myOrder1",
-  "orderId": 1,
-  "clientOrderId": "cancelMyOrder1"
-}
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item orderId
+
+[OPTIONAL]
+
+=item origClientOrderId
+
+[OPTIONAL]
+
+=item newClientOrderId
+
+[OPTIONAL] Used to uniquely identify this cancel.
+Automatically generated by default.
+
+=item recvWindow
+
+[OPTIONAL]
+
+=back
+
+B<RETURNS>:
+    A HASHref
+
+    {
+      "symbol": "LTCBTC",
+      "origClientOrderId": "myOrder1",
+      "orderId": 1,
+      "clientOrderId": "cancelMyOrder1"
+    }
 
 =cut
 
@@ -805,33 +1022,45 @@ sub cancel_order {
 
 =head2 open_orders
 
-$api->open_orders();
+    $api->open_orders();
 
 Get all open orders on a symbol. Careful when accessing this with no symbol.
 
-PARAMETERS:
-- symbol            [OPTIONAL]
-- recvWindow        [OPTIONAL]
+B<PARAMETERS>
 
-RETURNS:
-[
-  {
-    "symbol": "LTCBTC",
-    "orderId": 1,
-    "clientOrderId": "myOrder1",
-    "price": "0.1",
-    "origQty": "1.0",
-    "executedQty": "0.0",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "stopPrice": "0.0",
-    "icebergQty": "0.0",
-    "time": 1499827319559,
-    "isWorking": trueO
-  }
-]
+=over
+
+=item symbol
+
+OPTIONAL] Symbol, for example C<ETHBTC>.
+
+=item recvWindow
+
+[OPTIONAL]
+
+=back
+
+B<RETURNS>:
+    An ARRAYref of HASHrefs
+
+    [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 1,
+        "clientOrderId": "myOrder1",
+        "price": "0.1",
+        "origQty": "1.0",
+        "executedQty": "0.0",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "stopPrice": "0.0",
+        "icebergQty": "0.0",
+        "time": 1499827319559,
+        "isWorking": trueO
+      }
+    ]
 
 =cut
 
@@ -849,35 +1078,53 @@ sub open_orders {
 
 =head2 all_orders
 
-$api->all_orders();
+    $api->all_orders();
 
 Get all account orders; active, canceled, or filled.
 
-PARAMETERS:
-- symbol             [REQUIRED]
-- orderId            [OPTIONAL]
-- limit              [OPTIONAL] Default 500; max 500.
-- recvWindow         [OPTIONAL]
+B<PARAMETERS>
 
-RETURNS:
-[
-  {
-    "symbol": "LTCBTC",
-    "orderId": 1,
-    "clientOrderId": "myOrder1",
-    "price": "0.1",
-    "origQty": "1.0",
-    "executedQty": "0.0",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "stopPrice": "0.0",
-    "icebergQty": "0.0",
-    "time": 1499827319559,
-    "isWorking": true
-  }
-]
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item orderId
+
+[OPTIONAL]
+
+=item limit
+
+[OPTIONAL] Default 500; max 500.
+
+=item recvWindow
+
+[OPTIONAL]
+
+=back
+
+B<RETURNS>:
+    An ARRAYref of HASHrefs
+
+    [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 1,
+        "clientOrderId": "myOrder1",
+        "price": "0.1",
+        "origQty": "1.0",
+        "executedQty": "0.0",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "stopPrice": "0.0",
+        "icebergQty": "0.0",
+        "time": 1499827319559,
+        "isWorking": true
+      }
+    ]
 
 =cut
 
@@ -903,36 +1150,45 @@ sub all_orders {
 
 =head2 account
 
-$api->account();
+    $api->account();
 
 Get current account information.
 
-PARAMETERS:
-- recvWindow            [OPTIONAL]
+B<PARAMETERS>
 
-RETURNS:
-{
-  "makerCommission": 15,
-  "takerCommission": 15,
-  "buyerCommission": 0,
-  "sellerCommission": 0,
-  "canTrade": true,
-  "canWithdraw": true,
-  "canDeposit": true,
-  "updateTime": 123456789,
-  "balances": [
+=over
+
+=item recvWindow
+
+[OPTIONAL]
+
+=back
+
+B<RETURNS>:
+    A HASHref
+
     {
-      "asset": "BTC",
-      "free": "4723846.89208129",
-      "locked": "0.00000000"
-    },
-    {
-      "asset": "LTC",
-      "free": "4763368.68006011",
-      "locked": "0.00000000"
+      "makerCommission": 15,
+      "takerCommission": 15,
+      "buyerCommission": 0,
+      "sellerCommission": 0,
+      "canTrade": true,
+      "canWithdraw": true,
+      "canDeposit": true,
+      "updateTime": 123456789,
+      "balances": [
+        {
+          "asset": "BTC",
+          "free": "4723846.89208129",
+          "locked": "0.00000000"
+        },
+        {
+          "asset": "LTC",
+          "free": "4763368.68006011",
+          "locked": "0.00000000"
+        }
+      ]
     }
-  ]
-}
 
 =cut
 
@@ -947,32 +1203,50 @@ sub account {
 
 =head2 my_trades
 
-$api->my_trades();
+    $api->my_trades();
 
 Get trades for a specific account and symbol.
 
-PARAMETERS:
-- symbol            [REQUIRED]
-- limit             [OPTIONAL] Default 500; max 500.
-- fromId            [OPTIONAL] TradeId to fetch from. Default gets most recent
-                               trades.
-- recvWindow        [OPTIONAL]
+B<PARAMETERS>
 
-RETURNS:
-[
-  {
-    "id": 28457,
-    "orderId": 100234,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "commission": "10.10000000",
-    "commissionAsset": "BNB",
-    "time": 1499865549590,
-    "isBuyer": true,
-    "isMaker": false,
-    "isBestMatch": true
-  }
-]
+=over
+
+=item symbol
+
+[REQUIRED] Symbol, for example C<ETHBTC>.
+
+=item limit
+
+[OPTIONAL] Default 500; max 500.
+
+=item fromId
+
+[OPTIONAL] TradeId to fetch from. Default gets most recent
+trades.
+
+=item recvWindow
+
+[OPTIONAL]
+
+=back
+
+B<RETURNS>:
+    An ARRAYref of HASHrefs
+
+    [
+      {
+        "id": 28457,
+        "orderId": 100234,
+        "price": "4.00000100",
+        "qty": "12.00000000",
+        "commission": "10.10000000",
+        "commissionAsset": "BNB",
+        "time": 1499865549590,
+        "isBuyer": true,
+        "isMaker": false,
+        "isBestMatch": true
+      }
+    ]
 
 =cut
 
@@ -998,18 +1272,25 @@ sub my_trades {
 
 =head2 start_user_data_stream
 
-$api->start_user_data_stream();
+    $api->start_user_data_stream();
 
 Start a new user data stream. The stream will close after 60 minutes unless
 a keepalive is sent.
 
-PARAMETERS:
-       NONE
+B<PARAMETERS>
 
-RETURNS:
-{
-  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
-}
+=over
+
+=item Takes no parameters.
+
+=back
+
+B<RETURNS>:
+    A HASHref
+
+    {
+      "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
+    }
 
 =cut
 
@@ -1019,16 +1300,25 @@ sub start_user_data_stream {
 
 =head2 keep_alive_user_data_stream
 
-$api->keep_alive_user_data_stream();
+    $api->keep_alive_user_data_stream();
 
 Keepalive a user data stream to prevent a time out. User data streams will close
 after 60 minutes. It's recommended to send a ping about every 30 minutes.
 
-PARAMETERS:
-- listenKey          [REQUIRED]
+B<PARAMETERS>
 
-RETURNS:
-{}
+=over
+
+=item listenKey
+
+[REQUIRED]
+
+=back
+
+B<RETURNS>:
+    An empty HASHref
+
+    {}
 
 =cut
 
@@ -1049,15 +1339,23 @@ sub keep_alive_user_data_stream {
 
 =head2 delete_user_data_stream
 
-$api->delete_user_data_stream();
+    $api->delete_user_data_stream();
 
 Close out a user data stream.
 
-PARAMETERS:
-- listenKey          [REQUIRED]
+B<PARAMETERS>
+=over
 
-RETURNS:
-{}
+=item listenKey
+
+[REQUIRED]
+
+=back
+
+B<RETURNS>:
+    An empty HASHref
+
+    {}
 
 =cut
 
@@ -1076,7 +1374,44 @@ sub delete_user_data_stream {
     return $self->ua->delete('/api/v1/userDataStream', { query => $query } );
 }
 
+=head3 log
+
+    $api->log->warn("This is a warning");
+
+B<PARAMETERS>
+
+=over
+
+=item Takes no parameters.
+
+=back
+
+B<RETURNS>:
+
+    An instance of C<Binance::API::Logger>.
+
+=cut
+
 sub log { return $_[0]->{logger}; }
+
+=head3 ua
+
+    $api->ua->get('/binance/endpoint');
+
+B<PARAMETERS>
+
+=over
+
+=item Takes no parameters.
+
+=back
+
+B<RETURNS>
+
+    An instance of C<Binance::API::Request>.
+
+=cut
+
 sub ua  { return $_[0]->{ua}; }
 
 1;
