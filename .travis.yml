@@ -8,7 +8,7 @@ perl:
 env:
   - "HARNESS_OPTIONS=j6"
 install:
-  - "cpanm -n JSON LWP::UserAgent Exception::Class"
+  - "cpanm -n Exception::Class JSON LWP::Protocol::https LWP::UserAgent"
   - "cpanm -n --installdeps ."
 notifications:
 email: false

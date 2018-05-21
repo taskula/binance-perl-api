@@ -30,6 +30,8 @@ our $required = {
         => '1.38',
     'JSON'
         => '2.07',
+    'LWP::Protocol::https'
+        => '6.04',
     'LWP::UserAgent'
         => '5.837',
 };
