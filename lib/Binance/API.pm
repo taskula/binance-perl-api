@@ -35,7 +35,7 @@ use Binance::API::Request;
 
 use Binance::Exception::Parameter::Required;
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 =head1 NAME
 
