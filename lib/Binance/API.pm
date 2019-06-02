@@ -593,7 +593,7 @@ B<PARAMETERS>
 =back
 
 B<RETURNS>
-    A HASHref
+    A HASHref or an Array of HASHrefs if no symbol given
 
     {
       "priceChange": "-94.99999800",
