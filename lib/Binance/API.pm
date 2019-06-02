@@ -588,7 +588,7 @@ B<PARAMETERS>
 
 =item symbol
 
-[REQUIRED] Symbol, for example C<ETHBTC>.
+[OPTIONAL] Symbol, for example C<ETHBTC>.
 
 =back
 
@@ -618,14 +618,6 @@ B<RETURNS>
 
 sub ticker {
     my ($self, %params) = @_;
-
-    unless ($params{'symbol'}) {
-        $self->log->error('Parameter "symbol" required');
-        Binance::Exception::Parameter::Required->throw(
-            error => 'Parameter "symbol" required',
-            parameters => ['symbol']
-        );
-    }
 
     my $query = {
         symbol    => $params{'symbol'},
