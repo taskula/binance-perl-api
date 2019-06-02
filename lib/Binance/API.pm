@@ -578,7 +578,7 @@ sub klines {
 
 =head2 ticker
 
-    $api->klines( symbol => 'ETHBTC', interval => '1M' );
+    $api->ticker( symbol => 'ETHBTC', interval => '1M' );
 
 24 hour price change statistics.
 
