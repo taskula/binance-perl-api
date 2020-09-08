@@ -4,6 +4,18 @@
 
 Perl module for interacting with the [Binance API](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.mdl).
 
+### Requirements
+
+* make
+* headers for SSL library (see https://stackoverflow.com/questions/21729975/error-installing-in-netssleay)
+
+#### For Debian/Ubuntu users
+
+```
+apt update
+apt install make libssl-dev
+```
+
 ### Perl dependencies
 
 See lib/Binance/PerlDependencies.pm
