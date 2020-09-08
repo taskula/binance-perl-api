@@ -20,6 +20,14 @@ apt install make libssl-dev libnet-ssleay-perl
 
 See lib/Binance/PerlDependencies.pm
 
+OR
+
+```
+apt install cpanminus
+cd binance-perl-api
+sudo cpanm --installdeps .
+```
+
 ### Installing
 
 ```
@@ -56,6 +64,9 @@ prove t/*
 ## Usage
 
 ```
+use strict;
+use warnings;
+
 use Binance::API;
 
 my $api = Binance::API->new(
