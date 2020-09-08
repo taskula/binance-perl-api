@@ -58,7 +58,7 @@ sudo cpan JSON
 ## Running the tests
 
 ```
-prove t/*
+prove -r t/
 ```
 
 ## Usage
