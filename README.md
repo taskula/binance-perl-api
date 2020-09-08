@@ -7,13 +7,13 @@ Perl module for interacting with the [Binance API](https://github.com/binance-ex
 ### Requirements
 
 * make
-* headers for SSL library (see https://stackoverflow.com/questions/21729975/error-installing-in-netssleay)
+* Net::SSLeay
 
 #### For Debian/Ubuntu users
 
 ```
 apt update
-apt install make libssl-dev
+apt install make libssl-dev libnet-ssleay-perl
 ```
 
 ### Perl dependencies
