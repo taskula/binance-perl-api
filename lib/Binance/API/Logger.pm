@@ -91,6 +91,8 @@ sub AUTOLOAD {
     my $level = our $AUTOLOAD;
     $level =~ s/.*://;
 
+    return if $level eq 'DESTROY';
+
     my $message = shift || "";
 
     my $sub = (caller(1))[3];
