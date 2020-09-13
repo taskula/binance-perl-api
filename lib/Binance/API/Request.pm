@@ -97,13 +97,13 @@ sub _exec {
         if ($@) {
             $self->{logger}->error(
                 "Error decoding response. \nStatus => " . $response->code . ",\n"
-                . 'Content => ' . ($response->message ? $response->message : '')
+                . 'Content => ' . ($response->content ? $response->content : '')
             );
         }
     } else {
         $self->{logger}->error(
             "Unsuccessful request. \nStatus => " . $response->code . ",\n"
-            . 'Content => ' . ($response->message ? $response->message : '')
+            . 'Content => ' . ($response->content ? $response->content : '')
         );
     }
     return $response;
