@@ -152,6 +152,7 @@ sub _init {
         elsif (!defined $body->{'recvWindow'} && defined $recvWindow) {
             $body->{'recvWindow'} = $recvWindow;
         }
+        $body->{'timestamp'} = $timestamp if defined $timestamp;
 
         $uri->clone->query_form($body);
         $uri->query_form($query);
