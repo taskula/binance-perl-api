@@ -30,6 +30,8 @@ use base 'LWP::UserAgent';
 use Digest::SHA qw( hmac_sha256_hex );
 use JSON;
 use Time::HiRes;
+use URI;
+use URI::QueryParam;
 
 use Binance::Constants qw( :all );
 
@@ -192,7 +194,7 @@ sub _init {
             $uri->query_form($body);
         }
 
-        $data{'Content'} = $uri->query;
+        $data{'Content'} = $uri->query_form_hash;
     }
 
     if (defined $self->{apiKey}) {

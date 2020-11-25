@@ -34,7 +34,7 @@ subtest '_init() tests' => sub {
     plan tests => 1;
 
     subtest 'recvWindow only for signed requests' => sub {
-        plan tests => 6;
+        plan tests => 7;
 
         my $recv = Binance::API::Request->new(
             recvWindow => 12345,
@@ -69,11 +69,11 @@ subtest '_init() tests' => sub {
         ($ret, %data) = $recv->_init('/test',
             { body => { test => 'test' }, signed => 0 }
         );
-        unlike($data{'Content'}, qr/recvWindow/, 'No recvWindow unsigned body');
+        ok(! exists $data{'Content'}->{recvWindow}, 'No recvWindow unsigned body');
         ($ret, %data) = $recv->_init('/test',
             { body => { test => 'test' }, signed => 1 }
         );
-        like($data{'Content'}, qr/recvWindow=12345/, 'recvWindow signed body');
+        is($data{'Content'}->{recvWindow}, '12345', 'recvWindow signed body');
 
     };
 }
