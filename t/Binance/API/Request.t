@@ -28,10 +28,11 @@ use warnings;
 use Test::More tests => 1;
 use Test::Warn;
 use Data::Dumper;
+use Binance::API::Logger;
 use Binance::API::Request;
 
 subtest '_init() tests' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     subtest 'recvWindow only for signed requests' => sub {
         plan tests => 6;
@@ -39,6 +40,7 @@ subtest '_init() tests' => sub {
         my $recv = Binance::API::Request->new(
             recvWindow => 12345,
             secretKey => 'test',
+            logger => Binance::API::Logger->new()
         );
 
         # Mixed
@@ -69,12 +71,63 @@ subtest '_init() tests' => sub {
         ($ret, %data) = $recv->_init('/test',
             { body => { test => 'test' }, signed => 0 }
         );
-        ok(! exists $data{'Content'}->{recvWindow}, 'No recvWindow unsigned body');
+        unlike($data{'Content'}, qr/recvWindow/, 'No recvWindow unsigned body');
         ($ret, %data) = $recv->_init('/test',
             { body => { test => 'test' }, signed => 1 }
         );
-        is($data{'Content'}->{recvWindow}, '12345', 'recvWindow signed body');
+        like($data{'Content'}, qr/recvWindow=12345/, 'recvWindow signed body');
 
+    };
+
+    subtest 'Verify signatures' => sub {
+        plan tests => 1;
+
+        my ($mix_signature, $b_signature, $q_signature);
+        my $recv = Binance::API::Request->new(
+            recvWindow => 12345,
+            secretKey => 'test',
+            logger => Binance::API::Logger->new()
+        );
+
+        # Mixed
+        my ($ret, %data) = $recv->_init('/test', {
+            query => {
+                symbol => 'LTCBTC', side => 'BUY', type => 'LIMIT',
+                timeInForce => 'GTC'
+            },
+            body => {
+                quantity => 1, price => 0.1, recvWindow => 5000
+            },
+            signed => 1,
+            timestamp => 1499827319559,
+        } );
+        $mix_signature = $data{'Content'};
+
+        # Query only
+        ($ret, %data) = $recv->_init('/test', {
+            query => {
+                quantity => 1, price => 0.1, recvWindow => 5000,
+                symbol => 'LTCBTC', side => 'BUY', type => 'LIMIT',
+                timeInForce => 'GTC'
+            },
+            signed => 1,
+            timestamp => 1499827319559,
+        } );
+        $q_signature = $1 if $ret =~ /signature=(\w+)$/;
+
+        # Body only
+        ($ret, %data) = $recv->_init('/test', {
+            body => {
+                quantity => 1, price => 0.1, recvWindow => 5000,
+                symbol => 'LTCBTC', side => 'BUY', type => 'LIMIT',
+                timeInForce => 'GTC'
+            },
+            signed => 1,
+            timestamp => 1499827319559,
+        }  );
+        $b_signature = $1 if $data{'Content'} =~ /signature=(\w+)$/;
+
+        is($b_signature, $q_signature, 'Body only and query only signatures match');
     };
 }
 
