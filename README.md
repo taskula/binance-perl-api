@@ -2,7 +2,7 @@
 
 # Binance::API
 
-Perl module for interacting with the [Binance API](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.mdl).
+Perl module for interacting with the [Binance API](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md).
 
 ### Requirements
 
