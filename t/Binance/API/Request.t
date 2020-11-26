@@ -34,7 +34,7 @@ subtest '_init() tests' => sub {
     plan tests => 1;
 
     subtest 'recvWindow only for signed requests' => sub {
-        plan tests => 7;
+        plan tests => 6;
 
         my $recv = Binance::API::Request->new(
             recvWindow => 12345,
