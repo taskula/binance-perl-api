@@ -1090,13 +1090,21 @@ B<PARAMETERS>
 
 [OPTIONAL]
 
+=item startTime
+
+[OPTIONAL] Start time
+
+=item endTime
+
+[OPTIONAL] End time
+
 =item limit
 
-[OPTIONAL] Default 500; max 500.
+[OPTIONAL] Default 500; max 1000.
 
 =item recvWindow
 
-[OPTIONAL]
+[OPTIONAL] The value cannot be greater than 60000.
 
 =back
 
@@ -1136,6 +1144,8 @@ sub all_orders {
     my $query = {
         symbol     => $params{'symbol'},
         orderId    => $params{'orderId'},
+        startTime  => $params{'startTime'},
+        endTime    => $params{'endTime'},
         limit      => $params{'limit'},
         recvWindow => $params{'recvWindow'},
     };
