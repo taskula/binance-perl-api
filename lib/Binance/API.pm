@@ -1340,7 +1340,7 @@ sub keep_alive_user_data_stream {
     my $query = {
         listenKey  => $params{'listenKey'},
     };
-    return $self->ua->put('/api/v1/userDataStream', { query => $query } );
+    return $self->ua->put('/api/v3/userDataStream', { query => $query } );
 }
 
 =head2 delete_user_data_stream
@@ -1378,7 +1378,7 @@ sub delete_user_data_stream {
     my $query = {
         listenKey  => $params{'listenKey'},
     };
-    return $self->ua->delete('/api/v1/userDataStream', { query => $query } );
+    return $self->ua->delete('/api/v3/userDataStream', { query => $query } );
 }
 
 =head2 log
