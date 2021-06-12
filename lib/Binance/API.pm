@@ -753,7 +753,7 @@ sub book_ticker {
         symbol    => $params{'symbol'},
     };
 
-    return $self->ua->get('/api/v1/bookTicker', { query => $query } );
+    return $self->ua->get('/api/v1/ticker/bookTicker', { query => $query } );
 }
 
 =head2 order
