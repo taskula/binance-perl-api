@@ -1301,7 +1301,7 @@ B<RETURNS>
 =cut
 
 sub start_user_data_stream {
-    return $_[0]->ua->post('/api/v1/ticker/userDataStream');
+    return $_[0]->ua->post('/api/v3/userDataStream');
 }
 
 =head2 keep_alive_user_data_stream
