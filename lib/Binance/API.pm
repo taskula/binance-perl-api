@@ -677,9 +677,9 @@ sub ticker_price {
     return $self->ua->get('/api/v3/ticker/price', { query => $query } );
 }
 
-=head2 all_book_tickers
+=head2 book_ticker
 
-    $api->all_book_tickers();
+    $api->book_ticker();
 
 Best price/qty on the order book for all symbols.
 
@@ -726,7 +726,7 @@ B<RETURNS>
 
 =cut
 
-sub all_book_tickers {
+sub book_ticker {
     my ($self, %params) = @_;
 
     my $query = {
@@ -736,43 +736,18 @@ sub all_book_tickers {
     return $_[0]->ua->get('/api/v3/ticker/bookTicker', { query => $query } );
 }
 
-=head2 book_ticker
+=head2 all_book_tickers
 
-    $api->book_ticker();
+    $api->all_book_tickers();
 
-Best price/qty on the order book for a symbol or symbols.
-
-B<PARAMETERS>
-
-=over
-
-=item symbol
-
-[OPTIONAL] Symbol, for example C<ETHBTC>.
-
-=back
-
-B<RETURNS>
-    A HASHref
-
-    {
-      "symbol": "LTCBTC",
-      "bidPrice": "4.00000000",
-      "bidQty": "431.00000000",
-      "askPrice": "4.00000200",
-      "askQty": "9.00000000"
-    }
+DEPRECATED: use book_ticker instead.
 
 =cut
 
-sub book_ticker {
-    my ($self, %params) = @_;
+sub all_book_tickers {
+    my $self = shift;
 
-    my $query = {
-        symbol    => $params{'symbol'},
-    };
-
-    return $self->ua->get('/api/v1/ticker/bookTicker', { query => $query } );
+    return $self->book_ticker(@_);
 }
 
 =head2 order
