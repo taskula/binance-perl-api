@@ -437,7 +437,6 @@ B<PARAMETERS>
 
 [OPTIONAL] ID to get aggregate trades from INCLUSIVE.
 
-
 =item startTime
 
 [OPTIONAL] timestamp in ms to get aggregate trades from INCLUSIVE.
@@ -448,7 +447,7 @@ B<PARAMETERS>
 
 =item limit
 
-[OPTIONAL] Default 500; max 500.
+[OPTIONAL] Default 500; max 1000.
 
 =back
 
@@ -489,7 +488,7 @@ sub aggregate_trades {
         limit     => $params{'limit'},
     };
 
-    return $self->ua->get('/api/v1/aggTrades', { query => $query } );
+    return $self->ua->get('/api/v3/aggTrades', { query => $query } );
 }
 
 =head2 klines
