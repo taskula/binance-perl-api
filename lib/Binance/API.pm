@@ -512,7 +512,7 @@ B<PARAMETERS>
 
 =item limit
 
-[OPTIONAL] Default 500; max 500.
+[OPTIONAL] Default 500; max 1000.
 
 =item startTime
 
@@ -573,7 +573,7 @@ sub klines {
         limit     => $params{'limit'},
     };
 
-    return $self->ua->get('/api/v1/klines', { query => $query } );
+    return $self->ua->get('/api/v3/klines', { query => $query } );
 }
 
 =head2 ticker
