@@ -240,7 +240,7 @@ B<RETURNS>
 =cut
 
 sub exchange_info {
-    return $_[0]->ua->get('/api/v1/ticker/exchangeInfo');
+    return $_[0]->ua->get('/api/v3/exchangeInfo');
 }
 
 =head2 depth
