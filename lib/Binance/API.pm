@@ -589,6 +589,7 @@ B<PARAMETERS>
 =item symbol
 
 [OPTIONAL] Symbol, for example C<ETHBTC>.
+Warning: Careful when accessing this with no symbol.
 
 =back
 
@@ -623,7 +624,7 @@ sub ticker {
         symbol    => $params{'symbol'},
     };
 
-    return $self->ua->get('/api/v1/ticker/24hr', { query => $query } );
+    return $self->ua->get('/api/v3/ticker/24hr', { query => $query } );
 }
 
 =head2 ticker_price
