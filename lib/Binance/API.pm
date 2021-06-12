@@ -687,12 +687,25 @@ B<PARAMETERS>
 
 =over
 
-=item Takes no parameters.
+=item symbol
+
+[OPTIONAL] Symbol, for example C<ETHBTC>. If not given, returns best price/qty of all
+symbols.
 
 =back
 
 B<RETURNS>
-    An array of HASHrefs
+
+    A HASHref
+    {
+      "symbol": "LTCBTC",
+      "bidPrice": "4.00000000",
+      "bidQty": "431.00000000",
+      "askPrice": "4.00000200",
+      "askQty": "9.00000000"
+    }
+
+    OR an ARRAY of HASHrefs
 
     [
       {
@@ -714,7 +727,13 @@ B<RETURNS>
 =cut
 
 sub all_book_tickers {
-    return $_[0]->ua->get('/api/v1/ticker/allBookTickers');
+    my ($self, %params) = @_;
+
+    my $query = {
+        symbol    => $params{'symbol'},
+    };
+
+    return $_[0]->ua->get('/api/v3/ticker/bookTicker', { query => $query } );
 }
 
 =head2 book_ticker
