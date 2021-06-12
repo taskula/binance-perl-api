@@ -145,7 +145,7 @@ B<RETURNS>
 =cut
 
 sub ping {
-    return keys %{$_[0]->ua->get('/api/v1/ping')} == 0 ? 1 : 0;
+    return keys %{$_[0]->ua->get('/api/v3/ping')} == 0 ? 1 : 0;
 }
 
 =head2 time
@@ -170,7 +170,7 @@ B<RETURNS>
 sub time {
     my $self = shift;
 
-    my $time = $self->ua->get('/api/v1/time');
+    my $time = $self->ua->get('/api/v3/time');
     return exists $time->{serverTime} ? $time->{serverTime} : 0;
 }
 
@@ -257,7 +257,7 @@ B<PARAMETERS>
 
 =item limit
 
-[OPTIONAL] Default 100; max 100.
+[OPTIONAL] Default 100; max 5000. Valid limits: 5, 10, 20, 50, 100, 500, 1000, 5000
 
 =back
 
@@ -300,7 +300,7 @@ sub depth {
         limit  => $params{'limit'},
     };
 
-    return $self->ua->get('/api/v1/depth', { query => $query } );
+    return $self->ua->get('/api/v3/depth', { query => $query } );
 }
 
 =head2 trades
