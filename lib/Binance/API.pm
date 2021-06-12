@@ -319,7 +319,7 @@ B<PARAMETERS>
 
 =item limit
 
-[OPTIONAL] Default 500; max 500.
+[OPTIONAL] Default 500; max 1000.
 
 =back
 
@@ -355,7 +355,7 @@ sub trades {
         limit     => $params{'limit'},
     };
 
-    return $self->ua->get('/api/v1/trades', { query => $query } );
+    return $self->ua->get('/api/v3/trades', { query => $query } );
 }
 
 =head2 historical_trades
