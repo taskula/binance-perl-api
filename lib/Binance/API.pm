@@ -257,7 +257,7 @@ B<PARAMETERS>
 
 =item limit
 
-[OPTIONAL] Default 100; max 5000. Valid limits: 5, 10, 20, 50, 100, 500, 1000, 5000
+[OPTIONAL] Default 100; max 5000. Valid limits: 5, 10, 20, 50, 100, 500, 1000, 5000.
 
 =back
 
@@ -307,7 +307,7 @@ sub depth {
 
     $api->trades();
 
-Get recent trades (up to last 500).
+Get recent trades (up to last 1000).
 
 B<PARAMETERS>
 
@@ -374,7 +374,7 @@ B<PARAMETERS>
 
 =item limit
 
-[OPTIONAL] Default 500; max 500.
+[OPTIONAL] Default 500; max 1000.
 
 =item fromId
 
@@ -415,7 +415,7 @@ sub historical_trades {
         fromId    => $params{'fromId'},
     };
 
-    return $self->ua->get('/api/v1/historicalTrades', { query => $query } );
+    return $self->ua->get('/api/v3/historicalTrades', { query => $query } );
 }
 
 =head2 aggregate_trades
