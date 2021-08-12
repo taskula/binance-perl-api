@@ -36,7 +36,7 @@ use Binance::API::Request;
 use Binance::Exception::Parameter::BadValue;
 use Binance::Exception::Parameter::Required;
 
-our $VERSION = '1.06';
+our $VERSION = '1.07';
 
 =head1 NAME
 
