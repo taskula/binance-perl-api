@@ -1,9 +1,9 @@
 1.09 Tue Feb  16 22:47:40 UTC 2022
     - Call LWP::UserAgent constructor when initializing Request
-
-1.08 Tue Feb  16 22:25:15 UTC 2022
-    - Support for cancelling all open orders
     - Add baseUrl param to Binance::API->new()
+
+1.08 Thu Nov  11 07:03:30 UTC 2021
+    - Support for cancelling all open orders
 
 1.07 Thu Aug  12 22:11:46 UTC 2021
     - Upgrade to API Version 3
