@@ -56,6 +56,7 @@ sub new {
         apiKey     => $params{'apiKey'},
         secretKey  => $params{'secretKey'},
         recvWindow => $params{'recvWindow'},
+        baseUrl    => $params{'baseUrl'},
         logger     => $params{'logger'},
     };
 
@@ -143,7 +144,8 @@ sub _init {
 
     $timestamp //= int Time::HiRes::time * 1000 if $params->{'signed'};
 
-    my $uri = URI->new( BASE_URL . $path );
+    my $base_url = defined $self->{'baseUrl'} ? $self->{'baseUrl'} : BASE_URL;
+    my $uri = URI->new( $base_url . $path );
     my $full_path = $uri->as_string;
 
     my %data;
