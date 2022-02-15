@@ -52,13 +52,13 @@ sub new {
     my $class = shift;
     my %params = @_;
 
-    my $self = {
-        apiKey     => $params{'apiKey'},
-        secretKey  => $params{'secretKey'},
-        recvWindow => $params{'recvWindow'},
-        baseUrl    => $params{'baseUrl'},
-        logger     => $params{'logger'},
-    };
+    my $self = $class->SUPER::new;
+
+    $self->{apiKey}     = $params{'apiKey'};
+    $self->{secretKey}  = $params{'secretKey'};
+    $self->{recvWindow} = $params{'recvWindow'};
+    $self->{baseUrl}    = $params{'baseUrl'};
+    $self->{logger}     = $params{'logger'};
 
     bless $self, $class;
 }
